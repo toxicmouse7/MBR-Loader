@@ -1,0 +1,2 @@
+InitMasterInterruptController proto baseVectorNumber: word
+InitSlaveInterruptController proto baseVectorNumber: word
