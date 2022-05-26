@@ -67,8 +67,6 @@ main_pmode_code_start:
     push dword ptr BASE_VA_RING3_STACK  ; esp
     pushfd                              ; eflags
     push dword ptr 20h + 3              ; cs
-;    push BASE_VA_1_FUNC                ; eip
-;    push BASE_VA_2_FUNC                ; eip
     push BASE_VA_RING3                ; eip
     iretd
 

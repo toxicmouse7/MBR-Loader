@@ -45,6 +45,23 @@ InitAllPageTable proc baseTable:dword, startPhysAddress:dword, U_S:dword, R_W:dw
 
 InitAllPageTable endp
 
+FindFirstEmptyPDE proc uses ecx
+
+    mov eax, BASE_VA_PD
+    xor ecx, ecx
+
+    .while ecx < 512
+        .if dword ptr [eax] == 0
+            .break
+        .endif
+
+        inc ecx
+    .endw
+
+    mov eax, ecx
+
+FindFirstEmptyPDE endp
+
 memcpy proc uses ebx dst:dword, src:dword, srcSize:dword
 
     local i:dword
@@ -168,6 +185,9 @@ CreateTask proc taskQueue: ptr TSQueue, newEIP: dword, newESP: dword
 
     mov al, byte ptr [ebp + 36]
     mov [ts].tSS, al
+
+    invoke InitPageTableEntry, BASE_VA_RING0 + BASE_PA_PD, 42, BASE_PA_TABLE_SF, 1, 1
+    invoke InitAllPageTable, BASE_VA_RING0 + BASE_PA_TABLE_SF, BASE_RING3_ENTRY + 1000h, 1, 1    
 
     invoke PushTask, [taskQueue], addr [ts]
 

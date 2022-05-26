@@ -13,6 +13,8 @@ TaskState struct
     tEDI dd ?
     tEBP dd ?
     tCR3 dd ?
+    tPTEIndex dd ?
+    tPDEIndex dd ?
 
     cursor dd ?
 

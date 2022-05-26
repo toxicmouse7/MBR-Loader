@@ -10,6 +10,7 @@ BASE_PMOD equ BASE_RMODE_STAGE2 + RMODE_CODE_SIZE
 
 ; фиксированный физический адрес каталога страниц
 BASE_PA_PD equ 10000h
+BASE_VA_PD equ BASE_VA_RING0 + 10000h
 
 ; фиксированные физические адреса таблиц страниц
 BASE_PA_TABLE_CORE equ 11000h
