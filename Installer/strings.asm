@@ -174,3 +174,37 @@ StringLength proc stdcall uses si stringAddress: ptr byte
 	ret
 
 StringLength endp
+
+ReadNumber proc stdcall uses bx buffer: ptr byte
+
+	mov bx, [buffer]
+
+	xor ax, ax
+
+	.while 1
+
+		mov ah, 0
+		int 16h
+
+		.if al == 13
+			mov byte ptr [bx], 0
+			.break
+		.elseif al > '9' || al < '0'
+			.continue
+		.endif
+
+		mov byte ptr [bx], al
+		inc bx
+
+		invoke PrintSymbol, al
+
+	.endw
+
+	invoke PrintSymbol, 10
+	invoke PrintSymbol, 13
+
+	invoke StringToWord, [buffer]
+
+	ret
+
+ReadNumber endp

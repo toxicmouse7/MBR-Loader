@@ -38,6 +38,9 @@ org 7C00h
     mov ax, 1000h
     jmp ax
 
+
+org 7DECh
+
     coreLbaAddress:
     db 10h      ; размер DAP (должно быть 10h)
     db 0        ; не используется (должно быть 0)

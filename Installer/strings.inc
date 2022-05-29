@@ -8,3 +8,4 @@ hexd proto stdcall number: dword
 decimal proto stdcall number: dword
 StringToWord proto stdcall stringAddress: ptr byte
 StringLength proto stdcall stringAddress: ptr byte
+ReadNumber proto stdcall buffer: ptr byte

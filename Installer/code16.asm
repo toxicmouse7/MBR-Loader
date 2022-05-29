@@ -61,3 +61,61 @@ CHStoLBA proc stdcall uses bx dx head: byte, csAddress: word
 	ret
 
 CHStoLBA endp
+
+MergeCS proc stdcall cylinder: word, sector: byte
+
+	mov ax, [cylinder]
+	xchg ah, al
+	shl al, 6
+	or al, [sector]
+
+	ret
+
+MergeCS endp
+
+ReadLBA proc stdcall uses ax si dx numOfSec: word, address: dword, lbaIndex: dword, drive: byte
+
+	local dap: DiskAddressPacket
+
+	mov dap.dapSize, 10h
+	mov dap.unused, 0
+	mov ax, numOfSec
+	mov dap.numberOfSectorsToRead, ax
+	mov eax, [address]
+	mov dap.buffer, eax
+	mov eax, lbaIndex
+	mov dap.lbaAddressLDW, eax
+
+	mov ah, 42h
+	mov dl, [drive]
+	lea si, [dap]
+
+	int 13h
+
+	ret
+
+ReadLBA endp
+
+WriteLBA proc stdcall uses ax si dx numOfSec: word, address: dword, lbaIndex: dword, drive: byte
+
+	local dap: DiskAddressPacket
+
+	mov dap.dapSize, 10h
+	mov dap.unused, 0
+	mov ax, numOfSec
+	mov dap.numberOfSectorsToRead, ax
+	mov eax, [address]
+	mov dap.buffer, eax
+	mov eax, lbaIndex
+	mov dap.lbaAddressLDW, eax
+
+	mov ah, 43h
+	mov al, 0
+	mov dl, [drive]
+	lea si, [dap]
+
+	int 13h
+
+	ret
+
+WriteLBA endp
