@@ -85,6 +85,7 @@ ReadLBA proc stdcall uses ax si dx numOfSec: word, address: dword, lbaIndex: dwo
 	mov dap.buffer, eax
 	mov eax, lbaIndex
 	mov dap.lbaAddressLDW, eax
+	mov dap.lbaAddressHDW, 0
 
 	mov ah, 42h
 	mov dl, [drive]
@@ -108,6 +109,7 @@ WriteLBA proc stdcall uses ax si dx numOfSec: word, address: dword, lbaIndex: dw
 	mov dap.buffer, eax
 	mov eax, lbaIndex
 	mov dap.lbaAddressLDW, eax
+	mov dap.lbaAddressHDW, 0
 
 	mov ah, 43h
 	mov al, 0

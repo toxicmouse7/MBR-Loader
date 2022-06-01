@@ -94,10 +94,10 @@ begin:
         add [head], 1
         mov [sector], al
     .endif
+    invoke MergeCS, [cylinder], al
+    mov word ptr [bx + 6], ax
     mov al, [head]
     mov byte ptr [bx + 5], al
-    invoke MergeCS, [cylinder], [sector]
-    mov word ptr [bx + 6], ax
     mov eax, [lba]
     mov dword ptr [bx + 8], eax
     mov dword ptr [bx + 0Ch], 15
@@ -110,10 +110,24 @@ begin:
     mov bx, 600h
     mov ah, 3
     int 13h
-
+    ;0x7d5c
     invoke ReadLBA, 15, 0A000h, 9, [installerDrive]
-    ;поменять адреса
+    mov bx, 0A800h + 1E0h
+    mov eax, [lba]
+    inc eax
+    mov dword ptr [bx + 8h], eax ; подмена лба адреса ядра
+    add bx, 10h
+    add eax, 7
+    mov dword ptr [bx + 8h], eax ; подмена лба адреса юзерспейса
     invoke WriteLBA, 11, 0A800h, [lba], [drive]
+
+    mov ax, 2
+    int 10h
+
+    invoke PrintString, addr successString
+
+    hlt
+
 
     include strings.asm
     include code16.asm
@@ -124,6 +138,7 @@ cString db "Cylinder: ", 0
 hString db "Head: ", 0
 sString db "Sector: ", 0
 errString db "Incorrect size"
+successString db "Success", 0
 newLine db 13, 10, 0
 buffer db 4 dup(?)
 cylinder dw 0
